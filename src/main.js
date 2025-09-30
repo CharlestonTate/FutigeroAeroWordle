@@ -8,8 +8,6 @@ var gameOver = false;
 guessList = guessList.concat(wordList);
 
 var word = wordList[Math.floor(Math.random()*wordList.length)].toUpperCase();
-var gameStartTime = null;
-var gameEndTime = null;
 
 window.onload = function(){
     loadSettings();
@@ -43,7 +41,7 @@ function initialize() {
     // Create the keyboard and add it to the game page
     let keyboard = [
         ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L", " "],
         ["Enter", "Z", "X", "C", "V", "B", "N", "M", "⌫" ]
     ]
 
@@ -55,16 +53,10 @@ function initialize() {
         keyboardRow.classList.add("keyboard-row");
 
         for (let j = 0; j < currRow.length; j++) {
-            let key = currRow[j];
-            
-            // Skip empty spaces
-            if (key == " " || key.trim() == "") {
-                continue;
-            }
-            
             let keyTile = document.createElement("div");
+
+            let key = currRow[j];
             keyTile.innerText = key;
-            
             if (key == "Enter") {
                 keyTile.id = "Enter";
             }
@@ -174,7 +166,11 @@ function update() {
         setTimeout(() => {
             //Is it in the correct position?
             if (word[c] == letter) {
-                currTile.classList.add("correct");      
+                currTile.classList.add("correct");
+
+                let keyTile = document.getElementById("Key" + letter);
+                keyTile.classList.remove("present");
+                keyTile.classList.add("correct");
 
                 correct += 1;
                 letterCount[letter] -= 1; //deduct the letter count
@@ -182,7 +178,6 @@ function update() {
 
             if (correct == width) {
                 gameOver = true;
-                gameEndTime = new Date().getTime();
                 setTimeout(() => {
                     triggerConfetti();
                     showResultsModal(true, word);
@@ -268,7 +263,6 @@ function showResultsModal(isWin, word) {
     const content = document.querySelector('.results-content');
     const title = document.getElementById('resultsTitle');
     const message = document.getElementById('resultsMessage');
-    const stats = document.getElementById('resultsStats');
     const buttons = document.querySelector('.results-buttons');
     
     // Set content first (before showing anything)
@@ -276,40 +270,10 @@ function showResultsModal(isWin, word) {
         title.textContent = 'Congratulations!';
         title.style.color = '#6AAA64';
         message.textContent = `You guessed "${word.toUpperCase()}" correctly!`;
-        
-        // Calculate and display timing stats
-        if (gameStartTime && gameEndTime) {
-            const timeTaken = Math.round((gameEndTime - gameStartTime) / 1000);
-            const minutes = Math.floor(timeTaken / 60);
-            const seconds = timeTaken % 60;
-            
-            let timeString;
-            if (minutes > 0) {
-                timeString = `${minutes}m ${seconds}s`;
-            } else {
-                timeString = `${seconds}s`;
-            }
-            
-            stats.innerHTML = `
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <div class="stat-label">Time Taken</div>
-                        <div class="stat-value">${timeString}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Attempts</div>
-                        <div class="stat-value">${row}</div>
-                    </div>
-                </div>
-            `;
-        } else {
-            stats.innerHTML = '';
-        }
     } else {
         title.textContent = 'Game Over';
         title.style.color = '#787C7E';
         message.textContent = `The word was "${word.toUpperCase()}". Better luck next time!`;
-        stats.innerHTML = '';
     }
     
     // Reset all styles to initial hidden state
@@ -364,10 +328,6 @@ function resetGame() {
     col = 0;
     
     word = wordList[Math.floor(Math.random() * wordList.length)].toUpperCase();
-    
-    // Reset timing
-    gameStartTime = new Date().getTime();
-    gameEndTime = null;
     
     // Clear board tiles
     const tiles = document.querySelectorAll('.tile');
@@ -469,10 +429,6 @@ document.getElementById('backFromTutorialBtn').addEventListener('click', functio
 function initializeGame() {
     initialize();
     resetGame();
-    
-    // Start timing the game
-    gameStartTime = new Date().getTime();
-    gameEndTime = null;
     
     // Add keyboard event listener only when game is active
     document.addEventListener("keyup", handleKeyPress);
