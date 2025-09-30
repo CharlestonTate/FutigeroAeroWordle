@@ -551,6 +551,28 @@ p
     transform: scale(0.95);
 }
 
+/* Keyboard key states */
+.key-tile.correct, .enter-key-tile.correct {
+    background: linear-gradient(145deg, #6AAA64, #5a9454);
+    color: white;
+    border-color: #5a9454;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.key-tile.present, .enter-key-tile.present {
+    background: linear-gradient(145deg, #C9B458, #b8a347);
+    color: white;
+    border-color: #b8a347;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.key-tile.absent, .enter-key-tile.absent {
+    background: linear-gradient(145deg, #787C7E, #6a6d6f);
+    color: white;
+    border-color: #6a6d6f;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
 .results-modal {
     position: fixed;
     top: 0;
