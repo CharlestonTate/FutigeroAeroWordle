@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>WordleWORLD</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <!-- Main Menu Page -->
+    <div id="mainMenuPage" class="page active">
+        <div class="menu-container">
+            <h1 class="main-title">WORDLE</h1>
+            <p class="subtitle">by TateTechStudios</p>
+            <button id="mainStartBtn" class="menu-btn primary-btn">START</button>
+        </div>
+    </div>
+
+    <!-- Sub Menu Page -->
+    <div id="subMenuPage" class="page">
+        <div class="menu-container">
+            <h1 class="main-title">WORDLE</h1>
+            <div class="button-grid">
+                <button id="playBtn" class="menu-btn secondary-btn">START</button>
+                <button id="tutorialBtn" class="menu-btn secondary-btn">TUTORIAL</button>
+                <button id="settingsBtn" class="menu-btn secondary-btn">SETTINGS</button>
+                <button id="quitBtn" class="menu-btn secondary-btn">QUIT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Page -->
+    <div id="gamePage" class="page">
+        <button id="backToMenuBtn" class="back-btn">← MENU</button>
+        <div id="board"></div>
+        <h1 id="answer"></h1>
+    </div>
+
+    <!-- Tutorial Page -->
+    <div id="tutorialPage" class="page">
+        <div class="tutorial-container">
+            <button id="backFromTutorialBtn" class="back-btn">← BACK</button>
+            <div id="dialogueBox" class="dialogue-box">
+                <p id="dialogueText" class="dialogue-text"></p>
+                <div class="dialogue-hint">Click here to continue</div>
+            </div>
+            <img id="characterImage" src="wordante_art/idle.png" alt="Wordante" class="character-img">
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settingsPage" class="page">
+        <div class="menu-container">
+            <h1 class="main-title">SETTINGS</h1>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label>Difficulty</label>
+                    <select id="difficultySelect" class="setting-control">
+                        <option value="normal">Normal</option>
+                        <option value="hard">Hard Mode</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Sound Effects</label>
+                    <input type="checkbox" id="soundToggle" class="setting-control" checked>
+                </div>
+            </div>
+            <button id="backFromSettingsBtn" class="menu-btn secondary-btn">BACK</button>
+        </div>
+    </div>
+    
+    <div id="resultsModal" class="results-modal">
+        <div class="results-content">
+            <div id="resultsTitle" class="results-title"></div>
+            <div id="resultsMessage" class="results-message"></div>
+            <div id="resultsStats" class="results-stats"></div>
+            <div class="results-buttons">
+                <button id="playAgainBtn" class="result-btn play-again-btn">PLAY AGAIN</button>
+                <button id="homeBtn" class="result-btn home-btn">HOME</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="src/wordle.js"></script>
+<script src="src/main.js"></script>
+</html>
