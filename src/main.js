@@ -32,6 +32,8 @@ const menuMusic = new Audio('music/menu.mp3');
 menuMusic.loop = true;
 menuMusic.volume = 0.15;
 
+let musicStarted = false;
+
 // Set volume levels for all sounds
 Object.values(sounds).forEach(sound => {
     sound.volume = 0.3; // Much quieter
@@ -118,10 +120,7 @@ let currentDialogueIndex = 0;
 
 window.onload = function(){
     loadSettings();
-    // Start menu music on page load
-    setTimeout(() => {
-        startMenuMusic();
-    }, 1000); // Delay to let page load
+    // Menu music will start when user first interacts with the page
 }
 
 // ============================================================================
@@ -573,8 +572,17 @@ function playSound(soundName) {
 }
 
 function startMenuMusic() {
-    if (gameSettings.soundEffects) {
+    if (gameSettings.soundEffects && !musicStarted) {
         menuMusic.play().catch(e => console.log('Music play failed:', e));
+        musicStarted = true;
+    } else if (gameSettings.soundEffects && musicStarted && menuMusic.paused) {
+        menuMusic.play().catch(e => console.log('Music play failed:', e));
+    }
+}
+
+function ensureMusicStarted() {
+    if (!musicStarted && gameSettings.soundEffects) {
+        startMenuMusic();
     }
 }
 
@@ -724,6 +732,7 @@ document.getElementById('homeBtn').addEventListener('click', function() {
 
 // Main navigation buttons
 document.getElementById('mainStartBtn').addEventListener('click', function() {
+    ensureMusicStarted(); // Start music on first user interaction
     playSound('click');
     navigateToPage('subMenuPage');
 });
@@ -738,6 +747,11 @@ document.getElementById('tutorialBtn').addEventListener('click', function() {
     playSound('duh');
     navigateToPage('tutorialPage');
     startTutorial();
+});
+
+document.getElementById('guideBtn').addEventListener('click', function() {
+    playSound('duh');
+    navigateToPage('guidePage');
 });
 
 document.getElementById('settingsBtn').addEventListener('click', function() {
@@ -762,6 +776,11 @@ document.getElementById('backFromSettingsBtn').addEventListener('click', functio
 });
 
 document.getElementById('backFromTutorialBtn').addEventListener('click', function() {
+    playSound('back');
+    navigateToPage('subMenuPage');
+});
+
+document.getElementById('backFromGuideBtn').addEventListener('click', function() {
     playSound('back');
     navigateToPage('subMenuPage');
 });
