@@ -32,6 +32,10 @@ const menuMusic = new Audio('music/menu.mp3');
 menuMusic.loop = true;
 menuMusic.volume = 0.15;
 
+const tutorialMusic = new Audio('music/tut.mp3');
+tutorialMusic.loop = true;
+tutorialMusic.volume = 0.12;
+
 let musicStarted = false;
 
 // Set volume levels for all sounds
@@ -538,10 +542,15 @@ function navigateToPage(targetPageId) {
     const targetPage = document.getElementById(targetPageId);
     
     // Handle music based on page transitions
-    if (targetPageId === 'gamePage' || targetPageId === 'tutorialPage') {
+    if (targetPageId === 'gamePage') {
         fadeOutMenuMusic();
+        fadeOutTutorialMusic();
+    } else if (targetPageId === 'tutorialPage') {
+        fadeOutMenuMusic();
+        // Tutorial music will be started in startTutorial function
     } else if ((targetPageId === 'mainMenuPage' || targetPageId === 'subMenuPage') && 
                (currentPage && (currentPage.id === 'gamePage' || currentPage.id === 'tutorialPage'))) {
+        fadeOutTutorialMusic();
         fadeInMenuMusic();
     }
     
@@ -619,6 +628,29 @@ function fadeInMenuMusic() {
     }
 }
 
+function startTutorialMusic() {
+    if (gameSettings.soundEffects) {
+        tutorialMusic.play().catch(e => console.log('Tutorial music play failed:', e));
+    }
+}
+
+function stopTutorialMusic() {
+    tutorialMusic.pause();
+}
+
+function fadeOutTutorialMusic() {
+    const originalVolume = tutorialMusic.volume;
+    const fadeInterval = setInterval(() => {
+        if (tutorialMusic.volume > 0.01) {
+            tutorialMusic.volume -= 0.01;
+        } else {
+            tutorialMusic.pause();
+            tutorialMusic.volume = originalVolume;
+            clearInterval(fadeInterval);
+        }
+    }, 50);
+}
+
 // ============================================================================
 // SETTINGS MANAGEMENT
 // ============================================================================
@@ -647,6 +679,10 @@ function saveSettings() {
 function startTutorial() {
     currentDialogueIndex = 0;
     showDialogue();
+    // Start tutorial music after a short delay
+    setTimeout(() => {
+        startTutorialMusic();
+    }, 500);
 }
 
 function showDialogue() {
@@ -678,6 +714,7 @@ function nextDialogue() {
     playSound(soundToPlay);
     
     if (currentDialogueIndex === tutorialDialogue.length - 1) {
+        fadeOutTutorialMusic();
         navigateToPage('subMenuPage');
         return;
     }
